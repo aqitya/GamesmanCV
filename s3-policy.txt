@@ -1,0 +1,27 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::564300964014:role/MyLambdaRole"
+            },
+            "Action": "s3:ListBucket",
+            "Resource": "arn:aws:s3:::aarteebucket"
+        },
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::564300964014:role/MyLambdaRole"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::aarteebucket/*"
+        },
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::aarteebucket/*"
+        }
+    ]
+}
