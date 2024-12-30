@@ -10,10 +10,8 @@ def lambda_handler(event, context):
     lambda_client = boto3.client('lambda', config=myconfig)
 
     try:
-        # Log the received event for debugging
         print('Received event:', json.dumps(event))
 
-        # Determine the type of event
         if 'Records' in event:
             s3_event = event
         elif 'body' in event and event['body']:
@@ -31,7 +29,6 @@ def lambda_handler(event, context):
                 "body": json.dumps({"message": "No Records found in event."})
             }
 
-        # Validate 'Records' after parsing
         if 'Records' not in s3_event:
             return {
                 "statusCode": 400,
@@ -58,17 +55,15 @@ def lambda_handler(event, context):
 
         print(f"Processing video from bucket: {bucket_name}, key: {object_key}, size: {file_size}")
 
-        # Invoke the 'perms' Lambda function and pass bucket and key as parameters
         response = lambda_client.invoke(
-            FunctionName='perms',  # Replace with your actual 'perms' function name
-            InvocationType='RequestResponse',  # Synchronous invocation
+            FunctionName='perms',
+            InvocationType='RequestResponse',
             Payload=json.dumps({
                 'bucket': bucket_name,
                 'key': object_key
             })
         )
 
-        # Get the result from the invoked Lambda function
         response_payload = json.loads(response['Payload'].read())
 
         if response.get('StatusCode') == 200:
